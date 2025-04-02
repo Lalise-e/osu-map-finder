@@ -3,8 +3,8 @@ import { Hono } from 'hono'
 
 const app = new Hono()
 
-app.get('/', (c) => {
-  return c.text('Hello Hono!')
+app.get('/test/hello', (c) => {
+  return c.text('Hello, World!!!')
 })
 
 serve({
