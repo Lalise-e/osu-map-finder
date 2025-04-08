@@ -2,7 +2,7 @@ import { serve } from '@hono/node-server';
 import { Hono } from 'hono';
 import 'dotenv/config';
 import { drizzle } from 'drizzle-orm/node-postgres';
-import { beatmap_sets, beatmaps } from './db/schema.ts';
+import { beatmapsets, beatmaps } from './db/schema.ts';
 import { env } from 'process';
 import { eq, exists, sql } from 'drizzle-orm';
 import ParseMysqlDate from './timeConverter.ts';
@@ -20,7 +20,7 @@ app.get('/test/random', async (c) => {
 
 app.get('/test/delete', async (c) => {
   await db.delete(beatmaps);
-  await db.delete(beatmap_sets);
+  await db.delete(beatmapsets);
   return c.text("Table deleted");
 })
 
@@ -89,7 +89,7 @@ app.get('/test/seed', async (c) => {
   }
 
   mapsets.forEach(async (beatmaps, set_id) => {
-    await db.insert(beatmap_sets).values({beatmapset_id: set_id, beatmaps: beatmaps});
+    await db.insert(beatmapsets).values({beatmapset_id: set_id, beatmaps: beatmaps});
   })
   return c.text('Seed completed');
 })
