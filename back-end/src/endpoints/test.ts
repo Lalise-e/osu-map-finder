@@ -8,23 +8,17 @@ import db from '../db.ts';
 
 const app = new Hono();
 
-app.get('/random', async (c) => {
-    return c.json({
-      beatmaps: await db.select().from(beatmaps).orderBy(sql.raw('RANDOM()')).limit(2)
-    });
-  })
-  
-  app.get('/delete', async (c) => {
+app.get('/delete', async (c) => {
     await db.delete(beatmaps);
     await db.delete(beatmapsets);
     return c.text("Table deleted");
   })
   
-  app.get('/hello', (c) => {
+app.get('/hello', (c) => {
     return c.text('Hello, World!!!');
   })
   
-  app.get('/seed', async (c) => {
+app.get('/seed', async (c) => {
     //This function really needs to be made broken out into sub functions
     type mapType = typeof beatmaps.$inferInsert;
     const mapsets: Map<number, number[]> = new Map<number, number[]>();
