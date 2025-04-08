@@ -5,6 +5,7 @@ import { drizzle } from 'drizzle-orm/node-postgres';
 import { beatmap_sets, beatmaps } from './db/schema.ts';
 import { env } from 'process';
 import { eq, exists, sql } from 'drizzle-orm';
+import ParseMysqlDate from './timeConverter.ts';
 import maps from '../Seed/maps.json' with {type: 'json'};
 
 const db = drizzle(`postgresql://postgres:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_HOST}/${process.env.DATABASE_NAME}`)
@@ -75,13 +76,12 @@ app.get('/test/seed', async (c) => {
       tags: m.tags,
       file_md5: m.file_md5,
 
-      submit_date: m.submit_date,
-      approved_date: m.approved_date,
-      last_update: m.last_update,
+      submit_date: ParseMysqlDate(m.submit_date),
+      approved_date: ParseMysqlDate(m.approved_date),
+      last_update: ParseMysqlDate(m.last_update),
     };
     await db.insert(beatmaps).values(map);
     if(!mapsets.has(map.beatmapset_id)){
-      console.log(map.beatmapset_id);
       mapsets.set(map.beatmapset_id, [map.beatmap_id]);
       continue;
     }
