@@ -12,11 +12,11 @@ app.get('/delete', async (c) => {
     await db.delete(beatmaps);
     await db.delete(beatmapsets);
     return c.text("Table deleted");
-  })
+})
   
 app.get('/hello', (c) => {
     return c.text('Hello, World!!!');
-  })
+})
   
 app.get('/seed', async (c) => {
     //This function really needs to be made broken out into sub functions
@@ -82,6 +82,6 @@ app.get('/seed', async (c) => {
       await db.insert(beatmapsets).values({beatmapset_id: set_id, beatmaps: beatmaps});
     })
     return c.text('Seed completed');
-  })
+})
 
 export default app;

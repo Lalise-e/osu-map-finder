@@ -15,7 +15,7 @@ app.get('/random', async (c) => {
     return c.json({
       beatmaps: await db.select().from(beatmaps).orderBy(sql.raw('RANDOM()')).limit(limit)
     });
-  })
+})
 
 app.get('/search', (c) => {
     return c.text('Not Implemented');
