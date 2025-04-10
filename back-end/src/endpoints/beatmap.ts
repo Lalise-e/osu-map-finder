@@ -35,6 +35,10 @@ app.get('/search',async (c) => {
         switch(typeof exampleMap[name as keyof mapType]){
             case typeof Number():
                 term = parseNumber(name, lookup);
+                break;
+            case typeof true:
+                term = parseBoolean(name, lookup);
+                break;
         }
         if(term === '')
             continue;
@@ -64,6 +68,12 @@ function parseNumber(propertyName: string, lookup: Record<string, string>): stri
     query += (Number.isNaN(Number(lookup[`${propertyName}_min`]))) ? ''
     : `${/*Seperates the two boolean terms with an " AND ".*/(query === '' ? '' : ' AND ')}(${propertyName} >= ${lookup[`${propertyName}_min`]})`;
     return query;
+}
+
+function parseBoolean(propertyName: string, lookup: Record<string, string>): string{
+    if(lookup[propertyName] == undefined)
+        return '';
+    return `(${propertyName} = ${(lookup[propertyName] === '1') ? 'TRUE' : 'FALSE'})`;
 }
 
 export default app;
