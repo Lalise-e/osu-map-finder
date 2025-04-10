@@ -10,11 +10,7 @@ type mapsetType = typeof beatmapsets.$inferInsert;
 const exampleMap: mapType = (await db.select().from(beatmaps).limit(1))[0];
 
 app.get('/random', async (c) => {
-    let limit: number = Number(c.req.query('limit'));
-    if(Number.isNaN(limit))
-        limit = 1;
-    else if(limit > maxItemsPerPage)
-        limit = maxItemsPerPage;
+    let limit: number = getLimit(c.req.query('limit'));
     const IDs: mapsetType[] = await db.select().from(beatmapsets).orderBy(sql.raw('RANDOM()')).limit(limit);
     const result: mapType[][] = [];
     const promises: Promise<mapType[]>[] = [];
@@ -30,6 +26,7 @@ app.get('/random', async (c) => {
 })
 
 app.get('/search',async (c) => {
+    const limit: number = getLimit(c.req.query('limit'));
     let queryResult: string | undefined;
     let SqlQuery = '';
     const cc = c.req.query();
@@ -44,9 +41,18 @@ app.get('/search',async (c) => {
         SqlQuery = (SqlQuery === '') ? term : `${SqlQuery} AND ${term}`;
         console.log(SqlQuery);
     }
-    const result = await db.select().from(beatmaps).where(sql.raw(SqlQuery)).limit(maxItemsPerPage);
+    const result = await db.select().from(beatmaps).where(sql.raw(SqlQuery)).limit(limit);
     return c.json(result, 501);
 })
+
+function getLimit(limitString: string | undefined): number{
+    let limit: number = Number(limitString);
+    if(Number.isNaN(limit))
+        return 1;
+    if(limit > maxItemsPerPage)
+        return maxItemsPerPage;
+    return limit;
+}
 
 function parseNumber(propertyName: string, lookup: Record<string, string>): string{
     //Checks if there is an exact value specified and if not checks for a range.
@@ -56,7 +62,7 @@ function parseNumber(propertyName: string, lookup: Record<string, string>): stri
     if(!Number.isNaN(Number(lookup[`${propertyName}_max`])))
         query = `(${propertyName} <= ${lookup[`${propertyName}_max`]})`;
     query += (Number.isNaN(Number(lookup[`${propertyName}_min`]))) ? ''
-    : `${/*Seperates the two boolean term with an " AND ".*/(query === '' ? '' : ' AND ')}(${propertyName} >= ${lookup[`${propertyName}_min`]})`;
+    : `${/*Seperates the two boolean terms with an " AND ".*/(query === '' ? '' : ' AND ')}(${propertyName} >= ${lookup[`${propertyName}_min`]})`;
     return query;
 }
 
