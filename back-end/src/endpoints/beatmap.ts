@@ -29,12 +29,12 @@ app.get('/search',async (c) => {
     const limit: number = getLimit(c.req.query('limit'));
     let queryResult: string | undefined;
     let SqlQuery = '';
-    const cc = c.req.query();
+    const lookup = c.req.query();
     for(const name in exampleMap){
         let term: string = '';
         switch(typeof exampleMap[name as keyof mapType]){
             case typeof Number():
-                term = parseNumber(name, cc);
+                term = parseNumber(name, lookup);
         }
         if(term === '')
             continue;
