@@ -39,6 +39,8 @@ app.get('/search',async (c) => {
             case typeof true:
                 term = parseBoolean(name, lookup);
                 break;
+            case typeof '':
+                term = parseString(name, c.req.query(name));
         }
         if(term === '')
             continue;
@@ -74,6 +76,13 @@ function parseBoolean(propertyName: string, lookup: Record<string, string>): str
     if(lookup[propertyName] == undefined)
         return '';
     return `(${propertyName} = ${(lookup[propertyName] === '1') ? 'TRUE' : 'FALSE'})`;
+}
+
+function parseString(propertyName: string, propertyInput: string | undefined): string{
+    if(propertyInput === undefined)
+        return '';
+    //I have no idea if this is good or not but I am just gonna go with it because I am lazy.
+    return `(POSITION(\'${propertyInput.toLowerCase()}\' IN LOWER(${propertyName})) > 0)`
 }
 
 export default app;
