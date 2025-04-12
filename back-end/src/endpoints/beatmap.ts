@@ -1,7 +1,8 @@
 import { Hono } from 'hono';
 import { beatmaps, beatmapsets } from '../db/schema.ts';
 import db from '../db.ts';
-import { eq, sql, asc } from 'drizzle-orm';
+import { eq, sql, asc, desc } from 'drizzle-orm';
+import { date } from 'drizzle-orm/mysql-core';
 
 const app = new Hono();
 const maxItemsPerPage: number = 30;
@@ -14,15 +15,13 @@ app.get('/random', async (c) => {
     const IDs: mapsetType[] = await db.select().from(beatmapsets).orderBy(sql.raw('RANDOM()')).limit(limit);
     const result: mapType[][] = [];
     const promises: Promise<mapType[]>[] = [];
-    IDs.forEach(async (ID) => {
+    IDs.forEach((ID) => {
         promises.push(db.select().from(beatmaps).where(eq(beatmaps.beatmapset_id, ID.beatmapset_id)).orderBy(asc(beatmaps.diff_overall)));
     })
     await Promise.all(promises).then((values) => values.forEach((value) => {
         result.push(value);
     }));
-    return c.json({
-      result
-    }, 200);
+    return c.json(result, 200);
 })
 
 app.get('/search',async (c) => {
@@ -51,7 +50,16 @@ app.get('/search',async (c) => {
         SqlQuery = (SqlQuery === '') ? term : `${SqlQuery} AND ${term}`;
         console.log(SqlQuery);
     }
-    const result = await db.select().from(beatmaps).where(sql.raw(SqlQuery)).limit(limit);
+    
+    const IDs = await db.select().from(db.selectDistinct({beatmapset_id: beatmaps.beatmapset_id}).from(beatmaps).where(sql.raw(SqlQuery)).as('beatmapset_ids')).orderBy(sql.raw('RANDOM()')).limit(limit);
+    const promises: Promise<mapType[]>[] = [];
+    const result: mapType[][] = [];
+    IDs.forEach((id) => {
+        promises.push(db.select().from(beatmaps).where(eq(beatmaps.beatmapset_id, id.beatmapset_id)).orderBy(asc(beatmaps.mode), desc(beatmaps.difficultyrating)));
+    })
+    await Promise.all(promises).then((values) => values.forEach((value) => {
+        result.push(value);
+    }));
     return c.json(result, 501);
 })
 
