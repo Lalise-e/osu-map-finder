@@ -41,6 +41,10 @@ app.get('/search',async (c) => {
                 break;
             case typeof '':
                 term = parseString(name, c.req.query(name));
+                break;
+            case typeof new Date():
+                term = parseDate(name, c.req.query(name));
+                break;
         }
         if(term === '')
             continue;
@@ -85,4 +89,13 @@ function parseString(propertyName: string, propertyInput: string | undefined): s
     return `(POSITION(\'${propertyInput.toLowerCase()}\' IN LOWER(${propertyName})) > 0)`
 }
 
+function parseDate(propertyName: string, propertyInput: string | undefined): string{
+    if(propertyInput === undefined)
+        return '';
+    const dateNumber: number = Date.parse(propertyInput);
+    if(Number.isNaN(dateNumber))
+        return '';
+    const d: Date = new Date(dateNumber);
+    return `(TIMESTAMP \'${d.getUTCFullYear()}-${d.getUTCMonth() + 1}-${d.getUTCDate()} ${d.getUTCHours()}:${d.getUTCMinutes()}:${d.getUTCSeconds()}.${d.getUTCMilliseconds()}\' > ${propertyName})`;
+}
 export default app;
