@@ -94,7 +94,7 @@ function parseString(propertyName: string, propertyInput: string | undefined): s
     if(propertyInput === undefined)
         return '';
     //I have no idea if this is good or not but I am just gonna go with it because I am lazy.
-    return `(POSITION(\'${propertyInput.toLowerCase()}\' IN LOWER(${propertyName})) > 0)`
+    return `(POSITION(\'${sanitiseString(propertyInput.toLowerCase())}\' IN LOWER(${propertyName})) > 0)`
 }
 
 function parseDate(propertyName: string, propertyInput: string | undefined): string{
@@ -105,5 +105,9 @@ function parseDate(propertyName: string, propertyInput: string | undefined): str
         return '';
     const d: Date = new Date(dateNumber);
     return `(TIMESTAMP \'${d.getUTCFullYear()}-${d.getUTCMonth() + 1}-${d.getUTCDate()} ${d.getUTCHours()}:${d.getUTCMinutes()}:${d.getUTCSeconds()}.${d.getUTCMilliseconds()}\' > ${propertyName})`;
+}
+
+function sanitiseString(text: string): string{
+    return text.replaceAll('\'','\'\'')
 }
 export default app;
