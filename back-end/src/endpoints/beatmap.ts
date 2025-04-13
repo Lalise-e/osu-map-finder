@@ -42,7 +42,7 @@ app.get('/search',async (c) => {
                 term = parseString(name, c.req.query(name));
                 break;
             case typeof new Date():
-                term = parseDate(name, c.req.query(name));
+                term = parseDate(name, lookup);
                 break;
         }
         if(term === '')
@@ -97,14 +97,22 @@ function parseString(propertyName: string, propertyInput: string | undefined): s
     return `(POSITION(\'${sanitiseString(propertyInput.toLowerCase())}\' IN LOWER(${propertyName})) > 0)`
 }
 
-function parseDate(propertyName: string, propertyInput: string | undefined): string{
-    if(propertyInput === undefined)
-        return '';
-    const dateNumber: number = Date.parse(propertyInput);
+function parseDate(propertyName: string, lookup: Record<string,string>): string{
+    let result: string = parseSingleDate(propertyName, lookup[propertyName], '=');
+    if(result !== '')
+        return result;
+    result = parseSingleDate(`${propertyName}`, lookup[`${propertyName}_max`], ">");
+    const term: string = parseSingleDate(`${propertyName}`, lookup[`${propertyName}_min`], "<")
+    result += (term === '') ? '' : `${(result === '') ? '' : ' AND '}${term}`;
+    return result;
+}
+
+function parseSingleDate(propertyName: string, propertyValue: string, booleanOperator: string){
+    const dateNumber: number = Date.parse(propertyValue);
+    let date: Date = new Date(dateNumber);
     if(Number.isNaN(dateNumber))
         return '';
-    const date: Date = new Date(dateNumber);
-    return `(TIMESTAMP \'${formatDate(date)}\' < ${propertyName})`;
+    return `(TIMESTAMP \'${formatDate(date)}\' ${booleanOperator} ${propertyName})`;
 }
 
 function formatDate(date: Date): string{
