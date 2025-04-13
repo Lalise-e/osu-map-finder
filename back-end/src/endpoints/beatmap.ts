@@ -103,8 +103,12 @@ function parseDate(propertyName: string, propertyInput: string | undefined): str
     const dateNumber: number = Date.parse(propertyInput);
     if(Number.isNaN(dateNumber))
         return '';
-    const d: Date = new Date(dateNumber);
-    return `(TIMESTAMP \'${d.getUTCFullYear()}-${d.getUTCMonth() + 1}-${d.getUTCDate()} ${d.getUTCHours()}:${d.getUTCMinutes()}:${d.getUTCSeconds()}.${d.getUTCMilliseconds()}\' > ${propertyName})`;
+    const date: Date = new Date(dateNumber);
+    return `(TIMESTAMP \'${formatDate(date)}\' < ${propertyName})`;
+}
+
+function formatDate(date: Date): string{
+    return `${date.getUTCFullYear()}-${date.getUTCMonth() + 1}-${date.getUTCDate()} ${date.getUTCHours()}:${date.getUTCMinutes()}:${date.getUTCSeconds()}.${date.getUTCMilliseconds()}`;
 }
 
 function sanitiseString(text: string): string{
