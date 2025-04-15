@@ -1,0 +1,10 @@
+.header{
+    background-color: var(--clr-accent-main-100);
+    height: var(--size-height-header);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    h1{
+        color: var(--clr-black-200);
+    }
+}
