@@ -1,0 +1,23 @@
+:root{
+    --clr-accent-main-100: oklch(0.8 0.09 340);
+    --clr-accent-main-200: oklch(0.5 0.03 340);
+    --clr-accent-opposite-100: oklch(0.8 0.09 160);
+    --clr-accent-opposite-200: oklch(0.5 0.03 160);
+
+    --clr-white-100: #eeeeee;
+    --clr-white-200: #dedede;
+    --clr-white-300: #cecece;
+
+    --clr-black-100: #0e0e0e;
+    --clr-black-200: #2e2e2e;
+    --clr-black-300: #4e4e4e;
+
+    --size-height-header: clamp(100px, 20vh, 150px);
+}
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+    background-color: var(--clr-white-200);
+}
