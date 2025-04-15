@@ -1,5 +1,6 @@
 // app/routes/index.tsx
 import { createFileRoute, useRouter } from '@tanstack/react-router'
+import { SiteHeader } from '../components/header/SiteHeader'
 
 export const Route = createFileRoute('/')({
   component: Home,
@@ -8,6 +9,6 @@ export const Route = createFileRoute('/')({
 function Home() {
   const router = useRouter()
 
-  return (<></>
+  return (<><SiteHeader/></>
   )
 }
