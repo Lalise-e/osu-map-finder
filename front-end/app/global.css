@@ -1,25 +1,26 @@
 :root{
-    --clr-accent-main-100: oklch(0.8 0.09 340);
-    --clr-accent-main-200: oklch(0.5 0.03 340);
-    --clr-accent-opposite-100: oklch(0.8 0.09 160);
-    --clr-accent-opposite-200: oklch(0.5 0.03 160);
+    --nmbr-hue-main: 160;
 
-    --clr-white-100: #eeeeee;
-    --clr-white-200: #dedede;
-    --clr-white-300: #cecece;
+    --clr-accent-main-100: oklch(0.8 0.09 var(--nmbr-hue-main));
+    --clr-accent-main-200: oklch(0.5 0.03 var(--nmbr-hue-main));
 
-    --clr-black-100: #0e0e0e;
-    --clr-black-200: #2e2e2e;
-    --clr-black-300: #4e4e4e;
+    --clr-white-100: oklch(0.97 0.022 var(--nmbr-hue-main));
+    --clr-white-200: oklch(0.91 0.022 var(--nmbr-hue-main));
+    --clr-white-300: oklch(0.85 0.022 var(--nmbr-hue-main));
+
+    --clr-black-100: oklch(0.1 0.022 var(--nmbr-hue-main));
+    --clr-black-200: oklch(0.2 0.022 var(--nmbr-hue-main));
+    --clr-black-300: oklch(0.3 0.022 var(--nmbr-hue-main));
 
     --size-height-header: clamp(100px, 20vh, 150px);
     --size-height-footer: clamp(50px, 15vh, 100px);
     --size-height-page: calc(100vh - var(--size-height-header) - var(--size-height-footer));
+
 }
 *{
     margin: 0;
     padding: 0;
 }
 body{
-    background-color: var(--clr-white-200);
+    background-color: var(--clr-white-100);
 }
