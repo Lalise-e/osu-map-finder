@@ -1,0 +1,21 @@
+.row{
+    display: flex;
+    margin-top: auto;
+    justify-content: stretch;
+    div{
+        width: auto;
+        flex-grow: 1;
+        display: flex;
+        justify-content: center;
+
+    }
+}
+.passive{
+    border: solid 0px var(--clr-black-300);
+    border-width: 2px 1px;
+}
+.active{
+    background-color: var(--clr-white-100);
+    border: solid 0px var(--clr-black-300);
+    border-width: 2px 1px 0px 1px;
+}
