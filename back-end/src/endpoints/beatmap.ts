@@ -60,7 +60,7 @@ app.get('/search',async (c) => {
     await Promise.all(promises).then((values) => values.forEach((value) => {
         result.push(value);
     }));
-    return c.json(result, 501);
+    return c.json(result, 200);
 })
 
 function getLimit(limitString: string | undefined): number{
