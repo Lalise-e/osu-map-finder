@@ -24,7 +24,7 @@ DATABASE_NAME=
 
 6. Visit `http://localhost:16777/test/seed` to seed the database.
 
-7. Run `npm run dev` from `/back-end` and `/front-end` (you'll need to terminals for this) and go to `http://localhost:3000` and you should now see data load in from the database into the web app.
+7. Run `npm run dev` from `/back-end` and `/front-end` (you'll need two terminals for this) and go to `http://localhost:3000` and you should now see data load in from the database into the web app.
 
 ## Documentation
 
