@@ -16,6 +16,7 @@
     --size-height-footer: clamp(50px, 15vh, 100px);
     --size-height-page: calc(100vh - var(--size-height-header) - var(--size-height-footer));
 
+    --size-image: 250px;
 }
 *{
     margin: 0;
