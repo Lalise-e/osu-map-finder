@@ -26,13 +26,51 @@ DATABASE_NAME=
 
 7. Run `npm run dev` from `/back-end` and `/front-end` (you'll need two terminals for this) and go to `http://localhost:3000` and you should now see data load in from the database into the web app.
 
-## Documentation
+## Endpoints
 
-### Data Structure
+The following endpoints are specifically for the back-end which is by default port `16777`
+
+### /test/hello
+
+Returns a simple "Hello, World!".
+
+### /test/delete
+
+**DELETES** all the rows from all of the tables in the database, it has no authentication so do be carefull
+
+### /test/seed
+
+Loads the data from `/back-end/seed/maps.json` into the database.
+
+### /beatmap/random
+
+Returns a random beatmapset from the database. The amount of sets can be adjusted with the `limit` parameter so `/beatmap/random?limit=10` would return 10 random mapsets, it will not return more than 30 at a time.
+
+### /beatmap/search
+
+Searches the database for a random matching map and returns the set to which it belongs. You can filter the search based on any columns in the beatmaps table with url queries based of the column name. Different data types are treated differently. The max amount of mapsets returned can be adjusted with the `limit` parameter with a maximum of 30 sets returned at once. If you include multiple values for a parameter it will only care about the first one. There is currently a bug that will crash if no search query is specificed, whoever let that slide in really goofed.
+
+#### Numbers
+
+This is for singles, int32 and int16. For Numbers you can add a `_min` and a `_max` to specify and a maximum and minimum value, both of these are inclusive bounds. The exact search will take precedent of the range search.
+
+#### Timestamps
+
+Just like numbers you can specify a `_max` and a `_min` to get a range instead of a specific point in time. The exact search also takes precedent here.
+
+#### Booleans
+
+For booleans a `1` is `true` and everything else will be `false`. Except `undefined` which will be completely ignored.
+
+#### Strings
+
+String searches are case insensitive and will try to match the search term against any part of the string. So if you search for `hi` that will match for something like Nana**hi**ra.
+
+## Tables
 
 There are two tables `beatmaps` and `beatmapsets`. Currently `beatmapsets` is not being used so it will not be described here, but it is essential for some planned functionality.
 
-#### beatmaps
+### beatmaps
 
 |Column Name|Type|Description|Can be null?|
 |-----------|----|-----------|------------|
